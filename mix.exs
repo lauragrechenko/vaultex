@@ -32,7 +32,7 @@ defmodule Vaultex.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 1.0"},
-      {:poison, "~> 3.1 or ~> 4.0"},
+      {:poison, "~> 5.0"},
       {:eliver, "~> 2.0", only: :dev},
       {:ex_aws, "~> 2.0", optional: true},
       {:ex_doc, ">= 0.22.0", only: :dev},
