@@ -3,11 +3,17 @@ defmodule Vaultex.RedirectableRequests do
   # the config files in Vaultex appear to be ignored.
   @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
 
+  require Logger
+
   def request(method, url, params = %{}, headers, options \\ []) do
     options = if ssl_skip_verify?(), do: [{:hackney, [:insecure]} | options], else: options
     options = if certificate_path(), do: [{:ssl, [ verify: :verify_peer, cacertfile: certificate_path()]} | options], else: options
+    Logger.info("[DEBUG-BRUNO] request method #{inspect(method)}, url #{inspect(url)}, params #{inspect(params)}")
+    Logger.info("[DEBUG-BRUNO] request headers #{inspect(headers)}, options #{inspect(options)}")
     @httpoison.request(method, url, Poison.encode!(params, []), headers, options)
+    |> IO.inspect()
     |> follow_redirect(method, params, headers)
+    |> IO.inspect()
   end
 
   defp header_location(headers) do

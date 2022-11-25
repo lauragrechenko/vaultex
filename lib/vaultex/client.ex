@@ -11,6 +11,8 @@ defmodule Vaultex.Client do
   alias Vaultex.Leases, as: Leases
   @version "v1"
 
+  require Logger
+
   def start_link() do
     GenServer.start_link(__MODULE__, %{progress: "starting"}, name: :vaultex)
   end
@@ -228,6 +230,8 @@ defmodule Vaultex.Client do
   end
 
   def handle_call({:read, key}, _from, state) do
+    Logger.notice("[DEBUG-BRUNO] read key #{inspect(key)}, state #{inspect(state)}")
+
     Read.handle(key, state)
   end
 
@@ -240,6 +244,7 @@ defmodule Vaultex.Client do
   end
 
   def handle_call({:auth, method, credentials}, _from, state) do
+    Logger.notice("[DEBUG-BRUNO] auth method #{inspect(method)}, credentials: #{inspect(credentials)}, state #{inspect(state)}")
     Auth.handle(method, credentials, state)
   end
 
