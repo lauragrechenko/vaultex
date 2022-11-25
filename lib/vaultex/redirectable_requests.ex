@@ -12,9 +12,7 @@ defmodule Vaultex.RedirectableRequests do
         else: options
 
     @httpoison.request(method, url, Poison.encode!(params, []), headers, options)
-    |> IO.inspect()
     |> follow_redirect(method, params, headers)
-    |> IO.inspect()
   end
 
   defp header_location(headers) do
