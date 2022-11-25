@@ -52,7 +52,7 @@ defmodule Vaultex.Client do
   @spec auth(method :: :userpass, credentials :: {username :: String.t, password :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
   @spec auth(method :: :github, credentials :: {github_token :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
   @spec auth(method :: :token, credentials :: {token :: String.t}, timeout :: String.t | nil) :: {:ok, :authenticated}
-  @spec auth(method :: atom, credentials :: map) :: {:ok | :error, any}
+  @spec auth(method :: atom, credentials :: map, timeout :: String.t | nil) :: {:ok | :error, any}
   def auth(method, credentials, timeout \\ 5000) do
     GenServer.call(:vaultex, {:auth, method, credentials}, timeout)
   end
