@@ -1,7 +1,4 @@
 defmodule Vaultex.Auth do
-
-  require Logger
-
   def handle(:approle, {role_id, secret_id}, state) do
     handle(:approle, %{role_id: role_id, secret_id: secret_id}, state)
   end
@@ -36,24 +33,30 @@ defmodule Vaultex.Auth do
 
   # auth method with usernames are expected to call `POST auth/:method/login/:username`
   def handle(method, %{username: username} = credentials, state) do
-    Logger.notice("[DEBUG-BRUNO] auth method #{inspect(method)}, credentials: #{inspect(credentials)}, state #{inspect(state)}")
-    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [{"Content-Type", "application/json"}])
+    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [
+      {"Content-Type", "application/json"}
+    ])
     |> handle_response(state)
   end
 
   # Generic login behavior for most methods
   def handle(method, credentials, state) when is_map(credentials) do
-    Logger.notice("[DEBUG-BRUNO] handle #{inspect(method)}")
-    request(:post, "#{state.url}auth/#{method}/login", credentials, [{"Content-Type", "application/json"}])
+    request(:post, "#{state.url}auth/#{method}/login", credentials, [
+      {"Content-Type", "application/json"}
+    ])
     |> handle_response(state)
   end
 
   defp handle_response({:ok, response}, state) do
-    Logger.notice("[DEBUG-BRUNO] handle_response #{inspect(response)}")
     case response.body |> Poison.decode!() do
-      %{"errors" => messages} -> {:reply, {:error, messages}, state}
-      %{"auth" => nil, "data" => data} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: data["id"]})}
-      %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
+      %{"errors" => messages} ->
+        {:reply, {:error, messages}, state}
+
+      %{"auth" => nil, "data" => data} ->
+        {:reply, {:ok, :authenticated}, Map.merge(state, %{token: data["id"]})}
+
+      %{"auth" => properties} ->
+        {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
     end
   end
 

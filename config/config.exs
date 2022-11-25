@@ -20,7 +20,6 @@ use Mix.Config
 #
 config :logger, :console, level: :info
 
-
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment
 # by uncommenting the line below and defining dev.exs, test.exs and such.
@@ -31,4 +30,4 @@ config :logger, :console, level: :info
 
 config :vaultex, httpoison: HTTPoison
 
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
