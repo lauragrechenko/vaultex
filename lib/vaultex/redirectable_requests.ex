@@ -14,7 +14,8 @@ defmodule Vaultex.RedirectableRequests do
           customize_hostname_check: [match_fun: :public_key.pkix_verify_hostname_match_fun(:https)]
         ]} | options],
       else: options
-
+IO.inspect("DEBUG!!!!!")
+IO.inspect(options)
     @httpoison.request(method, url, Poison.encode!(params, []), headers, options)
     |> follow_redirect(method, params, headers)
   end
