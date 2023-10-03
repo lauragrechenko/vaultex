@@ -22,9 +22,6 @@ defmodule Vaultex.RedirectableRequests do
         ],
         else: options
 
-        IO.inspect("!!!DEBUG!!!")
-    IO.inspect(options)
-
     @httpoison.request(method, url, Poison.encode!(params, []), headers, options)
     |> follow_redirect(method, params, headers)
   end
